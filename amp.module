@@ -240,7 +240,12 @@ function amp_theme() {
           ]
         ]
       ]
-    ]
+    ],
+    'amp_instagram' => [
+      'variables' => [
+        'attributes' => [],
+      ],
+    ],
   ];
 
   return $theme;
