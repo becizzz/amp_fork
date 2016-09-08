@@ -2,13 +2,15 @@
 
 namespace Drupal\amp\Plugin\Field\FieldFormatter;
 
+use Drupal\amp\AmpInstagramShortcode;
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\media_entity\EmbedCodeValueTrait;
-use Drupal\media_entity_instagram\Plugin\MediaEntity\Type\Instagram;
+use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'amp_instagram' formatter.
@@ -21,9 +23,45 @@ use Drupal\media_entity_instagram\Plugin\MediaEntity\Type\Instagram;
  *   }
  * )
  */
-class AmpInstagramFormatter extends FormatterBase {
+class AmpInstagramFormatter extends FormatterBase implements ContainerFactoryPluginInterface {
 
-  use EmbedCodeValueTrait;
+  /**
+   * @var \Drupal\amp\AmpInstagramShortcode $ampInstagramShortcode
+   */
+  protected $ampInstagramShortcode;
+
+  /**
+   * AmpInstagramFormatter constructor.
+   * @param string $plugin_id
+   * @param mixed $plugin_definition
+   * @param \Drupal\Core\Field\FieldDefinitionInterface $field_definition
+   * @param array $settings
+   * @param string $label
+   * @param string $view_mode
+   * @param array $third_party_settings
+   * @param \Drupal\amp\AmpInstagramShortcode $ampInstagramShortcode
+   */
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, $label, $view_mode, array $third_party_settings, AmpInstagramShortcode $ampInstagramShortcode) {
+    parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $label, $view_mode, $third_party_settings);
+    $this->ampInstagramShortcode = $ampInstagramShortcode;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    // TODO: Implement create() method.
+    return new static(
+      $plugin_id,
+      $plugin_definition,
+      $configuration['field_definition'],
+      $configuration['settings'],
+      $configuration['label'],
+      $configuration['view_mode'],
+      $configuration['third_party_settings'],
+      $container->get('amp.instagram_shortcode')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -76,7 +114,6 @@ class AmpInstagramFormatter extends FormatterBase {
    */
   public function settingsSummary() {
     $summary = parent::settingsSummary();
-//    $summary = [];
 
     // Display this setting only if an AMP layout is set.
     $layout_options = $this->getLayouts();
@@ -101,8 +138,8 @@ class AmpInstagramFormatter extends FormatterBase {
     $settings = $this->getSettings();
     foreach ($items as $delta => $item) {
       $matches = [];
-      foreach (Instagram::$validationRegexp as $pattern => $key) {
-        if (preg_match($pattern, $this->getEmbedCode($item), $matches)) {
+      foreach (AmpInstagramShortcode::$validationRegexp as $pattern => $key) {
+        if (preg_match($pattern, $this->ampInstagramShortcode->getSourceValue($item), $matches)) {
           break;
         }
       }
