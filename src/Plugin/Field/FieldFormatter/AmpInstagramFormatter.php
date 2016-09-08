@@ -50,7 +50,6 @@ class AmpInstagramFormatter extends FormatterBase implements ContainerFactoryPlu
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    // TODO: Implement create() method.
     return new static(
       $plugin_id,
       $plugin_definition,
