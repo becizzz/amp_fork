@@ -246,6 +246,11 @@ function amp_theme() {
         'attributes' => [],
       ],
     ],
+    'amp_youtube' => [
+      'variables' => [
+        'attributes' => [],
+      ],
+    ],
   ];
 
   return $theme;
