@@ -40,5 +40,3 @@ services:
   logger.channel.amp:
     parent: logger.channel_base
     arguments: ['amp']
-  amp.instagram_shortcode:
-    class: Drupal\amp\AmpInstagramShortcode
