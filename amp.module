@@ -251,6 +251,12 @@ function amp_theme() {
         'attributes' => [],
       ],
     ],
+    'amp_carousel' => [
+      'variables' => [
+        'attributes' => [],
+        'slides' => [],
+      ],
+    ],
   ];
 
   return $theme;
