@@ -2,18 +2,14 @@
 
 namespace Drupal\amp\Plugin\Field\FieldFormatter;
 
-use Drupal\Core\Field\FieldDefinitionInterface;
-use Drupal\Core\Field\FieldItemInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'amp_instagram' formatter.
  *
- * @todo Make this available for other field types.
+ * @todo Make this compatible with other field types.
  *
  * @FieldFormatter(
  *   id = "amp_instagram",
@@ -142,5 +138,4 @@ class AmpInstagramFormatter extends FormatterBase {
       'responsive' => 'responsive',
     ];
   }
-
 }

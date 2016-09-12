@@ -9,6 +9,8 @@ use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter
 /**
  * Plugin implementation of the 'amp_carousel' formatter.
  *
+ * @todo Make this compatible with other field types.
+ *
  * @FieldFormatter(
  *   id = "amp_carousel",
  *   label = @Translation("AMP Carousel"),
@@ -49,7 +51,7 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
       '#description' => $this->t('<a href=":url" target="_blank">Layout Information</a>', array(':url' => $layout_url)),
     ];
 
-    // @TODO: This should not appear when 'fixed-height' is selected.
+    // @todo: This should not appear when 'fixed-height' is selected.
     $elements['amp_width'] = [
       '#title' => t('Layout Width'),
       '#type' => 'textfield',
@@ -79,6 +81,8 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
       '#type' => 'checkbox',
       '#default_value' => $this->getSetting('amp_carousel_controls'),
     ];
+
+    // @todo Add support for additional carousel attributes.
 
     return $elements;
   }
@@ -115,13 +119,18 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
 
     $settings = $this->getSettings();
     $slides = parent::viewElements($items, $langcode);
+    $attributes = [
+      'layout' => $settings['amp_layout'],
+      'width' => $settings['amp_layout'] == 'fixed-height' ? 'auto' : $settings['amp_width'],
+      'height' => $settings['amp_height'],
+      'type' => $settings['amp_carousel_type'],
+    ];
+    if ($settings['amp_carousel_controls']) {
+      $attributes['controls'] = '';
+    }
     $elements[] = [
       '#type' => 'amp_carousel',
-      '#attributes' => [
-        'layout' => $settings['amp_layout'],
-        'width' => $settings['amp_layout'] == 'fixed-height' ? 'auto' : $settings['amp_width'],
-        'height' => $settings['amp_height'],
-      ],
+      '#attributes' => $attributes,
       '#slides' => $slides,
     ];
 
@@ -140,5 +149,4 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
       'responsive' => 'responsive',
     ];
   }
-
 }

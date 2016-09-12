@@ -17,8 +17,8 @@ use Drupal\Core\Render\Element\RenderElement;
  * component.
  *
  * Properties:
- * - #account: An array with iframe details. See template_preprocess_amp_carousel()
- *   for documentation of the properties in this array.
+ * - #attributes: An array with carousel element attributes.
+ * - #slides: An array of carousel slides.
  *
  * @RenderElement("amp_carousel")
  */

@@ -11,6 +11,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Plugin implementation of the 'amp_youtube' formatter.
  *
+ * @todo Make this compatible with other field types
+ *
  * @FieldFormatter(
  *   id = "amp_youtube",
  *   label = @Translation("AMP Youtube"),
@@ -50,7 +52,7 @@ class AmpYoutubeFormatter extends FormatterBase {
       '#description' => $this->t('<a href=":url" target="_blank">Layout Information</a>', array(':url' => $layout_url)),
     ];
 
-    // @TODO: This should not appear when 'fixed-height' is selected.
+    // @todo: This should not appear when 'fixed-height' is selected.
     $elements['amp_width'] = [
       '#title' => t('Layout Width'),
       '#type' => 'textfield',
@@ -103,7 +105,7 @@ class AmpYoutubeFormatter extends FormatterBase {
       $elements[$delta] = [
         '#type' => 'amp_youtube',
         '#attributes' => [
-          'data-videoid' => $this->viewValue($item),
+          'data-videoid' => $item->value,
           'layout' => $settings['amp_layout'],
           'width' => $settings['amp_layout'] == 'fixed-height' ? 'auto' : $settings['amp_width'],
           'height' => $settings['amp_height'],
@@ -112,21 +114,6 @@ class AmpYoutubeFormatter extends FormatterBase {
     }
 
     return $elements;
-  }
-
-  /**
-   * Generate the output appropriate for one field item.
-   *
-   * @param \Drupal\Core\Field\FieldItemInterface $item
-   *   One field item.
-   *
-   * @return string
-   *   The textual output generated.
-   */
-  protected function viewValue(FieldItemInterface $item) {
-    // The text value has no text format assigned to it, so the user input
-    // should equal the output, including newlines.
-    return nl2br(Html::escape($item->value));
   }
 
   /**
@@ -141,5 +128,4 @@ class AmpYoutubeFormatter extends FormatterBase {
       'responsive' => 'responsive',
     ];
   }
-
 }

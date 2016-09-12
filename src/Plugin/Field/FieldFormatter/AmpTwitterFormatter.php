@@ -9,6 +9,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Plugin implementation of the 'amp_twitter' formatter.
  *
+ * @todo Make this compatible with other field types.
+ *
  * @FieldFormatter(
  *   id = "amp_twitter",
  *   label = @Translation("AMP Twitter"),
@@ -61,7 +63,7 @@ class AmpTwitterFormatter extends FormatterBase {
       '#default_value' => $this->getSetting('amp_height'),
     ];
 
-    // @TODO: This should not appear when 'fixed-height' is selected.
+    // @todo: This should not appear when 'fixed-height' is selected.
     $elements['amp_width'] = [
       '#title' => t('Layout Width'),
       '#type' => 'textfield',
@@ -135,5 +137,4 @@ class AmpTwitterFormatter extends FormatterBase {
       'responsive' => 'responsive',
     ];
   }
-
 }

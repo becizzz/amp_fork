@@ -17,8 +17,7 @@ use Drupal\Core\Render\Element\RenderElement;
  * component.
  *
  * Properties:
- * - #account: An array with iframe details. See template_preprocess_amp_twitter()
- *   for documentation of the properties in this array.
+ * - #attributes: An array with twitter element details.
  *
  * @RenderElement("amp_twitter")
  */

@@ -9,6 +9,8 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Plugin implementation of the 'amp_pinterest_embed' formatter.
  *
+ * @todo Make this compatible with other fields types
+ *
  * @FieldFormatter(
  *   id = "amp_pinterest_embed",
  *   label = @Translation("AMP Pinterest Embed"),
@@ -27,7 +29,7 @@ class AmpPinterestEmbedFormatter extends FormatterBase {
       'amp_layout' => 'responsive',
       'amp_width' => '300',
       'amp_height' => '300',
-    ];
+    ] + parent::defaultSettings();
   }
 
   /**
@@ -35,7 +37,7 @@ class AmpPinterestEmbedFormatter extends FormatterBase {
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
 
-    $elements = [];
+    $elements = parent::settingsForm($form, $form_state);
 
     $layout_url = 'https://www.ampproject.org/docs/guides/responsive/control_layout.html#size-and-position-elements';
     // Add configuration options for layout.
@@ -48,7 +50,7 @@ class AmpPinterestEmbedFormatter extends FormatterBase {
       '#description' => $this->t('<a href=":url" target="_blank">Layout Information</a>', array(':url' => $layout_url)),
     ];
 
-    // @TODO: This should not appear when 'fixed-height' is selected.
+    // @todo: This should not appear when 'fixed-height' is selected.
     $elements['amp_width'] = [
       '#title' => t('Layout Width'),
       '#type' => 'textfield',
@@ -121,5 +123,4 @@ class AmpPinterestEmbedFormatter extends FormatterBase {
       'responsive' => 'responsive',
     ];
   }
-
 }
