@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\amp\Element\AmpCarousel.
- */
-
 namespace Drupal\amp\Element;
 
 use Drupal\Core\Render\Element\RenderElement;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\amp\Element\AmpYoutube.
- */
-
 namespace Drupal\amp\Element;
 
 use Drupal\Core\Render\Element\RenderElement;
