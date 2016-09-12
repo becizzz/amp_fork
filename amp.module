@@ -257,6 +257,11 @@ function amp_theme() {
         'slides' => [],
       ],
     ],
+    'amp_pinterest_embed' => [
+      'variables' => [
+        'attributes' => [],
+      ],
+    ],
   ];
 
   return $theme;

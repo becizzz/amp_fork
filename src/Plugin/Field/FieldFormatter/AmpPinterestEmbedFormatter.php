@@ -3,21 +3,21 @@
 namespace Drupal\amp\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Field\Plugin\Field\FieldFormatter\EntityReferenceEntityFormatter;
 
 /**
- * Plugin implementation of the 'amp_carousel' formatter.
+ * Plugin implementation of the 'amp_pinterest_embed' formatter.
  *
  * @FieldFormatter(
- *   id = "amp_carousel",
- *   label = @Translation("AMP Carousel"),
+ *   id = "amp_pinterest_embed",
+ *   label = @Translation("AMP Pinterest Embed"),
  *   field_types = {
- *     "entity_reference"
+ *     "link"
  *   }
  * )
  */
-class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
+class AmpPinterestEmbedFormatter extends FormatterBase {
 
   /**
    * {@inheritdoc}
@@ -27,16 +27,15 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
       'amp_layout' => 'responsive',
       'amp_width' => '300',
       'amp_height' => '300',
-      'amp_carousel_type' => 'slides',
-      'amp_carousel_controls' => TRUE,
-    ] + parent::defaultSettings();
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm(array $form, FormStateInterface $form_state) {
-    $elements = parent::settingsForm($form, $form_state);
+
+    $elements = [];
 
     $layout_url = 'https://www.ampproject.org/docs/guides/responsive/control_layout.html#size-and-position-elements';
     // Add configuration options for layout.
@@ -64,22 +63,6 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
       '#default_value' => $this->getSetting('amp_height'),
     ];
 
-    $elements['amp_carousel_type'] = [
-      '#title' => t('Carousel type'),
-      '#type' =>'select',
-      '#default_value' => $this->getSetting('amp_carousel_type'),
-      '#options' => [
-        'slides' => 'slides',
-        'carousel' => 'carousel',
-      ],
-    ];
-
-    $elements['amp_carousel_controls'] = [
-      '#title' => t('Show carousel controls'),
-      '#type' => 'checkbox',
-      '#default_value' => $this->getSetting('amp_carousel_controls'),
-    ];
-
     return $elements;
   }
 
@@ -87,7 +70,7 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
    * {@inheritdoc}
    */
   public function settingsSummary() {
-    $summary = parent::settingsSummary();
+    $summary = [];
 
     // Display this setting only if an AMP layout is set.
     $layout_options = $this->getLayouts();
@@ -98,10 +81,6 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
         $summary[] = t('Width: @width', ['@width' => $this->getSetting('amp_width')]);
       }
       $summary[] = t('Height: @height', ['@height' => $this->getSetting('amp_height')]);
-    }
-    $summary[] = t('Carousel type: @carousel_type', ['@carousel_type' => $this->getSetting('amp_carousel_type')]);
-    if ($this->getSetting('amp_carousel_controls')) {
-      $summary[] = t('Show controls');
     }
 
     return $summary;
@@ -114,16 +93,19 @@ class AmpCarouselFormatter extends EntityReferenceEntityFormatter {
     $elements = [];
 
     $settings = $this->getSettings();
-    $slides = parent::viewElements($items, $langcode);
-    $elements[] = [
-      '#type' => 'amp_carousel',
-      '#attributes' => [
-        'layout' => $settings['amp_layout'],
-        'width' => $settings['amp_layout'] == 'fixed-height' ? 'auto' : $settings['amp_width'],
-        'height' => $settings['amp_height'],
-      ],
-      '#slides' => $slides,
-    ];
+    foreach ($items as $delta => $item) {
+      $url = $item->getUrl();
+      $elements[$delta] = [
+        '#type' => 'amp_pinterest_embed',
+        '#attributes' => [
+          'layout' => $settings['amp_layout'],
+          'width' => $settings['amp_layout'] == 'fixed-height' ? 'auto' : $settings['amp_width'],
+          'height' => $settings['amp_height'],
+          'data-do' => 'embedPin',
+          'data-url' => $url->getUri(),
+        ],
+      ];
+    }
 
     return $elements;
   }
