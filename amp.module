@@ -262,6 +262,11 @@ function amp_theme() {
         'attributes' => [],
       ],
     ],
+    'amp_twitter' => [
+      'variables' => [
+        'attributes' => [],
+      ],
+    ],
   ];
 
   return $theme;

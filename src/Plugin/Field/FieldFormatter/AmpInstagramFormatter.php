@@ -13,6 +13,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Plugin implementation of the 'amp_instagram' formatter.
  *
+ * @todo Make this available for other field types.
+ *
  * @FieldFormatter(
  *   id = "amp_instagram",
  *   label = @Translation("AMP Instagram"),
@@ -66,7 +68,7 @@ class AmpInstagramFormatter extends FormatterBase {
       '#default_value' => $this->getSetting('amp_height'),
     ];
 
-    // @TODO: This should not appear when 'fixed-height' is selected.
+    // @todo This should not appear when 'fixed-height' is selected.
     $elements['amp_width'] = [
       '#title' => t('Layout Width'),
       '#type' => 'textfield',
@@ -107,7 +109,7 @@ class AmpInstagramFormatter extends FormatterBase {
     foreach ($items as $delta => $item) {
       $matches = [];
       foreach (self::$patterns as $pattern => $key) {
-        if (preg_match($pattern, $this->getInstagramCode($item), $matches)) {
+        if (preg_match($pattern, $item->uri, $matches)) {
           break;
         }
       }
@@ -139,29 +141,6 @@ class AmpInstagramFormatter extends FormatterBase {
       'nodisplay' => 'nodisplay',
       'responsive' => 'responsive',
     ];
-  }
-
-  /**
-   * Extracts the raw code from input.
-   * Copied over from media_entity module.
-   *
-   * @param mixed $value
-   *   The input value. Can be a normal string or a value wrapped by the
-   *   Typed Data API.
-   *
-   * @return string|null
-   */
-  private function getInstagramCode($value) {
-    if (is_string($value)) {
-      return $value;
-    }
-    elseif ($value instanceof FieldItemInterface) {
-      $class = get_class($value);
-      $property = $class::mainPropertyName();
-      if ($property) {
-        return $value->$property;
-      }
-    }
   }
 
 }
